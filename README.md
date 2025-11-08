@@ -479,3 +479,157 @@ See [README.md](../README.md).
 - [Agents](../agents/base.py)
 
 *Built with cosmic intent.*
+"""Stellar Forge: Self-evolving AI for emergent realities."""
+
+__version__ = "0.1.0-alpha.1"
+__author__ = "Leroy H. Mason (Elior Malak)"
+
+from .forge import cli_forge, _forge_entity, ForgeInput
+from .halo_ui import run_halo  # For script entry
+from .agents.base import StellarAgent
+from .ember.engine import EmberEngine
+from .veil.storage import VeilStorage
+
+__all__ = [
+    "cli_forge", "_forge_entity", "ForgeInput",
+    "run_halo", "StellarAgent", "EmberEngine", "VeilStorage"
+][build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "stellar-forge"
+dynamic = ["version"]
+description = "Self-evolving AI forge for emergent realities"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Leroy H. Mason (Elior Malak)", email = "elior@malak.dev"}
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "cosmic-nexus>=0.2.0",
+    "streamlit>=1.32.0",
+    "langgraph>=0.0.20",
+    "sympy>=1.12",
+    "qiskit>=0.46.0",
+    "ipfshttpclient>=0.8.0",
+    "pydantic>=2.5.0",
+    "structlog>=24.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "ruff>=0.1.5",
+    "mkdocs>=1.5.3",
+]
+
+[project.scripts]
+forge = "stellar_forge.forge:cli_forge"
+halo = "stellar_forge.halo_ui:run_halo"
+
+[tool.hatch.version]
+path = "stellar_forge/__init__.py"
+
+[tool.ruff]
+line-length = 88
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q"
+testpaths = ["tests"]
+#!/usr/bin/env python
+"""Demo: Forge a quick entity – no args needed."""
+
+import asyncio
+from forge import _forge_entity, ForgeInput
+
+async def main():
+    prompt = "Birth a rogue AI trader betting on asteroid mining stocks"
+    input_data = ForgeInput(prompt=prompt, num_agents=3, evolution_steps=2)
+    forged = await _forge_entity(input_data)
+    print(f"Forged: {forged['entity_id']}")
+    print(f"Provenance: {forged['provenance_dag']}")
+    # Save auto
+    import json
+    with open("demo_output.json", "w") as f:
+        json.dump(forged, f, indent=2)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+    # Stellar Forge Documentation
+
+Welcome to the forge's lore. Expand with MkDocs.
+
+## Quickstart
+See [README.md](../README.md).
+
+## API Reference
+- [Forge CLI](../stellar_forge/forge.py)
+- [Halo UI](../stellar_forge/halo_ui.py)
+- [Agents](../stellar_forge/agents/base.py)
+- [Ember Engine](../stellar_forge/ember/engine.py)
+- [Veil Storage](../stellar_forge/veil/storage.py)
+
+## Next Steps: Evolve the Forge
+- Hook real Grok-4: Replace mocks in `forge.py` with `xai-sdk` calls.
+- Quantum Live: Integrate IBM Quantum in `ember/engine.py`.
+- P2P Swarm: Add WebSockets for agent collab (v0.2.0 tease).
+- Community Forge: PRs for custom agents—e.g., LIGO wave listeners.
+
+*Built with cosmic intent. What's forged next?*
+
+---
+
+*Last hammered: November 8, 2025. Ether eternal.*
+import pytest
+from unittest.mock import AsyncMock, patch
+from stellar_forge.forge import _forge_entity, ForgeInput  # Adjusted import
+
+@pytest.fixture
+def sample_input():
+    return ForgeInput(prompt="Test forge", num_agents=2, evolution_steps=1)
+
+@pytest.mark.asyncio
+async def test_forge_entity(sample_input):
+    with patch('stellar_forge.forge.Orchestrator') as mock_orch:
+        mock_orch_instance = AsyncMock()
+        mock_orch_instance.orchestrate.return_value = {
+            'tasks': [{'params': {'prompt': 'test'}}] * 2
+        }
+        mock_orch.return_value.__aenter__.return_value = mock_orch_instance
+        
+        with patch('stellar_forge.forge.VeilStorage') as mock_veil:
+            mock_veil_instance = AsyncMock()
+            mock_veil_instance.store.return_value = "QmTestCID"
+            mock_veil.return_value.__aenter__.return_value = mock_veil_instance
+        
+        forged = await _forge_entity(sample_input)
+        assert forged['entity_id'].startswith('test_forge')
+        assert len(forged['agents']) == 2
+        assert 'provenance_dag' in forged
+        assert forged['provenance_dag'].endswith('_graph.png')
+        # Lint & Test
+ruff check . && pytest tests/
+
+# Commit the Polish
+git add .
+git commit -m "fix: Syntax untangle & alpha.1 polish – mocks green, demo sparked"
+
+# Remote & Push (if not set)
+git remote add origin https://github.com/elior-malak/stellar-forge.git  # Or your fork
+git branch -M main
+git push -u origin main
+
+# Tag Alpha
+git tag v0.1.0-alpha.1
+git push origin v0.1.0-alpha.1
+
+# MkDocs Live (Optional)
+mkdocs gh-deploy  # Deploys to GitHub Pages
