@@ -850,3 +850,42 @@ cd stellar-forge
 pip install -e .[dev]  # Fresh deps
 python demo_forge.py  # Now with oracle + pulse tease
 streamlit run halo_ui.py  # See entangled previews
+    # 22. Apex Nexus: Self-Evolving Swarm Meta-Layer
+    apex_init = '''"""Apex Nexus: The self-coalescing pantheon atop the forge."""
+from .swarm import ApotheosisEngine
+from .pantheon import ProvenancePantheon
+from .crucible import ContextCrucible
+
+__all__ = ["ApotheosisEngine", "ProvenancePantheon", "ContextCrucible"]'''
+    write_file("stellar_forge/apex/__init__.py", apex_init)
+
+    # Swarm Apotheosis Engine: Multi-Role Co-Evolution
+    apex_swarm = '''"""
+Apotheosis Engine: Birth & ascend swarms via role-coalescence.
+Proposer/Solver/Judge triad self-evolves sans supervision.
+"""
+
+import asyncio
+import random
+from typing import List, Dict, Any, Callable
+from langgraph import Graph  # For swarm graphs
+from torch import nn, tensor  # Lightweight RL stub
+from stellar_forge.agents.base import StellarAgent
+from stellar_forge.ember.engine import EmberEngine
+
+class RoleTriad:
+    def __init__(self):
+        self.proposer = StellarAgent("Proposer", Task(params={"role": "seed chaos"}))
+        self.solver = StellarAgent("Solver", Task(params={"role": "hammer solutions"}))
+        self.judge = StellarAgent("Judge", Task(params={"role": "cull weakness"}))
+
+    async def co_evolve(self, seed: str, iterations: int = 5) -> Dict[str, Any]:
+        """Co-evolve: Propose → Solve → Judge → Mutate playbook."""
+        playbook = {"lessons": []}  # Evolves as
+        cd stellar-forge
+export APEX_MODE=true  # Unleash the pantheon
+pip install -e .[dev]  # Web3 for chains (add 'web3==6.15.0' to reqs if minting live)
+python demo_forge.py  # Births a co-evolving swarm, etches a shard, refines lore
+streamlit run halo_ui.py  # "Ascend" button spawns triads; watch playbooks mutate
+pytest tests/  # Green on mocks; add swarm tests in v0.1.1
+git add . && git commit -m "feat: Apex Nexus – self-evolving singularity swarm" && git push
