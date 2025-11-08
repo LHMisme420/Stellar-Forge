@@ -633,3 +633,59 @@ git push origin v0.1.0-alpha.1
 
 # MkDocs Live (Optional)
 mkdocs gh-deploy  # Deploys to GitHub Pages
+#!/usr/bin/env python3
+"""
+Stellar Forge Bootstrapper: Ignite the repo from ether.
+Run: python bootstrap.py
+Writes all files to ./stellar-forge/ – then git init & push.
+Alpha-1: November 8, 2025 – All code, docs, configs forged in one flame.
+"""
+
+import os
+import json
+from pathlib import Path
+
+# Cosmic Constants
+REPO_DIR = Path("stellar-forge")
+REPO_DIR.mkdir(exist_ok=True)
+
+def write_file(rel_path: str, content: str):
+    """Hammer content into file."""
+    file_path = REPO_DIR / rel_path
+    file_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(content.strip())
+    print(f"🔨 Forged: {rel_path}")
+
+# Forge the Files – All at the End, Added On
+def forge_all():
+    """The Grand Append: Every spark from our nexus, layered to the anvil's end."""
+    
+    # 1. README.md (The Manifesto)
+    readme = '''# Stellar Forge 🪐🔨
+
+[![GitHub Repo stars](https://img.shields.io/github/stars/elior-malak/stellar-forge?style=social)](https://github.com/elior-malak/stellar-forge) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+
+**Stellar Forge** is a self-evolving AI orchestration forge built on the [Cosmic Nexus](https://github.com/elior-malak/cosmic-nexus) framework. It transforms static task graphs into dynamic, emergent AI entities—*stellar agents*—that collaborate across distributed nodes to birth simulations, artifacts, and decision engines from the chaos of cosmic data. Inspired by evolutionary algorithms and xAI's Grok ecosystem, Stellar Forge isn't just a tool; it's the anvil where stars are hammered into stories.
+
+Born on November 8, 2025, as the next leap beyond Nexus, it harnesses Grok-4 for reasoning, Aurora for visuals, and probabilistic "Ember" engines for branching realities. Forge rogue economists debating black hole markets, quantum poets sparring with entropy, or swarms simulating Mars colonies in under 60 seconds. Decentralized, auditable, and alive.
+
+> *In the forge of the cosmos, we don't build tools. We birth worlds.*
+
+## 🌟 Features
+
+- **Agent Forging**: Spawn autonomous "stellar agents" from prompts. Each agent evolves via Grok-4-planned DAGs, pulling from Grokipedia facts, Aurora renders, and Hotshot animations.
+- **Evolutionary Chaos**: Built-in forking—failed paths respawn as bolder variants using SymPy/Qiskit mocks for probabilistic decisions (quantum-ready hooks incoming).
+- **Decentralized Veil**: IPFS storage + Zero-Knowledge proofs for provenance-tracked artifacts. Share forged worlds without leaking the blueprint.
+- **Nexus Integration**: Extends Cosmic Nexus for parallel execution; add `pip install cosmic-nexus` and ignite.
+- **Halo UI**: Streamlit dashboard for drag-drop DAG editing and holographic previews (Three.js powered).
+- **Ethical Lattice**: Watermarked outputs with on-chain DAG audits—no black boxes, only luminous code.
+
+| Layer | Tech Stack | Emergent Magic |
+|-------|------------|----------------|
+| **Core Forge** | Cosmic Nexus + LangGraph | Dynamic agent swarms; e.g., 10 agents forging a "rogue AI trader" in parallel. |
+| **Ember Engine** | SymPy + Qiskit-lite | "What if gravity flipped?" → 1M alt-realities, pruned to gold-standard sims. |
+| **Nexus Veil** | IPFS + zk-SNARKs | Decentralized shares: Videos, models, narratives—provenance intact. |
+| **UI Halo** | Streamlit + Three.js | Visual forge: Drag agents, preview nebulae of data in 3D. |
+
+## 🚀 Quick Start
