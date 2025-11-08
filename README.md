@@ -664,7 +664,8 @@ def forge_all():
     # 1. README.md (The Manifesto)
     readme = '''# Stellar Forge 🪐🔨
 
-[![GitHub Repo stars](https://img.shields.io/github/stars/elior-malak/stellar-forge?style=social)](https://github.com/elior-malak/stellar-forge) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![GitHub Repo stars](https://img.shields.io/github/stars/elior-malak/stellar-forge?style=social)](https://github.com/elior-malak/stellar-forge) [![Licen
+se: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 
 **Stellar Forge** is a self-evolving AI orchestration forge built on the [Cosmic Nexus](https://github.com/elior-malak/cosmic-nexus) framework. It transforms static task graphs into dynamic, emergent AI entities—*stellar agents*—that collaborate across distributed nodes to birth simulations, artifacts, and decision engines from the chaos of cosmic data. Inspired by evolutionary algorithms and xAI's Grok ecosystem, Stellar Forge isn't just a tool; it's the anvil where stars are hammered into stories.
 
@@ -689,3 +690,163 @@ Born on November 8, 2025, as the next leap beyond Nexus, it harnesses Grok-4 for
 | **UI Halo** | Streamlit + Three.js | Visual forge: Drag agents, preview nebulae of data in 3D. |
 
 ## 🚀 Quick Start
+    # 19. Cosmic Pulse: Event Listener Module
+    pulse_init = '''"""Cosmic Pulse: Listen to the universe's heartbeat."""
+from .listener import PulseListener
+
+__all__ = ["PulseListener"]'''
+    write_file("stellar_forge/pulse/__init__.py", pulse_init)
+
+    pulse_listener = '''"""
+Pulse Listener: Forge on cosmic events (e.g., LIGO detections).
+"""
+
+import asyncio
+import aiohttp
+from typing import Callable, Dict, Any
+from datetime import datetime
+
+class PulseListener:
+    def __init__(self, event_callback: Callable[[Dict[str, Any]], None]):
+        self.callback = event_callback
+        self.feeds = {
+            "ligo": "https://ligo.org/detections.php",  # Mock endpoint; real RSS/API
+            "apod": "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"  # Free NASA API
+        }
+
+    async def start_listening(self, interval: int = 300):  # 5min polls
+        """Poll feeds; trigger forge on events."""
+        while True:
+            for feed_name, url in self.feeds.items():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(url) as resp:
+                        data = await resp.json()
+                        if self._is_event(data):  # e.g., new detection
+                            event = {"type": feed_name, "data": data, "timestamp": datetime.now()}
+                            self.callback(event)  # Triggers forge
+            await asyncio.sleep(interval)
+
+    def _is_event(self, data: Dict[str, Any]) -> bool:
+        """Detect triggers (customize: e.g., 'detection' in title)."""
+        return "detection" in str(data).lower() or "merger" in str(data).lower()  # Simple mock
+'''
+    write_file("stellar_forge/pulse/listener.py", pulse_listener)
+
+    # Integrate into forge.py (quick patch in bootstrap)
+    forge_patch = '''# Add to end of stellar_forge/forge.py, after if __name__:
+if __name__ == "__main__":
+    # Demo: Auto-forge on pulse
+    from pulse.listener import PulseListener
+    def on_event(event):
+        print(f"Cosmic trigger! Forging: {event['type']}")
+        # Auto-call forge with event data
+    listener = PulseListener(on_event)
+    asyncio.create_task(listener.start_listening())
+    cli_forge()'''
+    # Note: For full, append to existing forge.py content – or run post-bootstrap
+    print("Pulse forged: Add NASA API key to env for live stars.")
+        # 20. Singularity Oracle: Predict & Pre-Spawn
+    oracle_init = '''"""Oracle: Foresee the forge's next birth."""
+from .predictor import SingularityOracle
+
+__all__ = ["SingularityOracle"]'''
+    write_file("stellar_forge/oracle/__init__.py", oracle_init)
+
+    oracle_predictor = '''"""
+Singularity Oracle: Predict prompts from history.
+Uses torch for lightweight embedding (mock embeddings here).
+"""
+
+import torch
+import torch.nn as nn
+from typing import List, Dict, Any
+from veil.storage import VeilStorage  # History persistence
+
+class PromptEmbedder(nn.Module):
+    def __init__(self, vocab_size=1000, embed_dim=64):
+        super().__init__()
+        self.embed = nn.Embedding(vocab_size, embed_dim)
+        self.fc = nn.Linear(embed_dim, 1)  # Predict next "intent score"
+
+    def forward(self, x):
+        return torch.sigmoid(self.fc(self.embed(x)))
+
+class SingularityOracle:
+    def __init__(self):
+        self.model = PromptEmbedder()
+        self.veil = VeilStorage()
+        self.history = self._load_history()
+
+    def _load_history(self) -> List[str]:
+        # Mock: Load past prompts from Veil
+        return ["black hole", "trader", "entropy poet"]  # From demo
+
+    def predict(self, current_prompt: str) -> Dict[str, Any]:
+        """Predict next forge; spawn if >0.7 confidence."""
+        # Mock embedding: Simple hash-to-idx
+        idx = hash(current_prompt) % 1000
+        pred = self.model(torch.tensor([idx]))
+        if pred > 0.7:
+            next_prompt = f"Predicted evolution: {current_prompt} + quantum twist"
+            return {"next_prompt": next_prompt, "confidence": pred.item()}
+        return {"next_prompt": None}
+
+    def learn(self, prompt: str):
+        """Evolve model on new forge (stub: append history)."""
+        self.history.append(prompt)
+        self.veil.store({"history_update": prompt})  # Persist
+'''
+    write_file("stellar_forge/oracle/predictor.py", oracle_predictor)
+
+    # Patch into halo_ui.py: Add prediction sidebar
+    print("Oracle awakened: Integrates into UI for 'Surprise Me' button.")
+        # 21. Entangled Outputs: Quantum Weave
+    entangle = '''"""
+Entangle: Quantum-link agent outputs for multimodal magic.
+"""
+
+from qiskit import QuantumCircuit, Aer, execute
+from qiskit.visualization import plot_histogram
+import matplotlib.pyplot as plt
+from typing import List, Dict, Any
+import io
+import base64
+
+def entangle_outputs(outputs: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Run Bell-state entanglement; influence outputs probabilistically."""
+    qc = QuantumCircuit(2, 2)
+    qc.h(0)
+    qc.cx(0, 1)
+    qc.measure_all()
+
+    backend = Aer.get_backend('qasm_simulator')
+    result = execute(qc, backend, shots=1024).result()
+    counts = result.get_counts(qc)
+
+    # Influence: e.g., '00' boosts chaos, '11' harmonizes
+    dominant = max(counts, key=counts.get)
+    for out in outputs:
+        if dominant == '00':
+            out['output']['data'] += " [entangled chaos: doubled entropy]"
+        else:
+            out['output']['data'] += " [entangled harmony: unified narrative]"
+
+    # Render viz as base64 image (for UI embed)
+    fig = plot_histogram(counts)
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    img_b64 = base64.b64encode(buf.read()).decode()
+    return {"entangled_viz": f"data:image/png;base64,{img_b64}", "outputs": outputs}
+
+# Integrate: Call in EmberEngine.evolve() post-prune
+'''
+    write_file("stellar_forge/entangle.py", entangle)
+
+    # Quick ember patch note
+    print("Entangle forged: Add 'from entangle import entangle_outputs' to ember/engine.py; call after _fork_and_prune.")
+    python bootstrap.py  # Re-run to append
+cd stellar-forge
+pip install -e .[dev]  # Fresh deps
+python demo_forge.py  # Now with oracle + pulse tease
+streamlit run halo_ui.py  # See entangled previews
